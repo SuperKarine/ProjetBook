@@ -64,6 +64,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: copy-docker-compose
     steps:
+      - name: Check secrets presence
+        run: |
+          echo "GH_TOKEN is set: ${{ secrets.GH_TOKEN != '' }}"
+          echo "VPS_IP is set: ${{ secrets.VPS_IP != '' }}"
+          echo "VPS_USER is set: ${{ secrets.VPS_USER != '' }}"
+          echo "VPS_PASSWORD is set: ${{ secrets.VPS_PASSWORD != '' }}
+
       - name: 🚀 Deploy images to server
         uses: appleboy/ssh-action@master
         with:
