@@ -6,12 +6,12 @@ jobs:
   ssh-test:
     runs-on: ubuntu-latest
     steps:
-      - name: 🛠 Setup SSH Key (from base64)
+      - name: 🔑 Setup SSH key (Base64 decoded)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/id_rsa
+          echo "${{ secrets.VPS_SSH_KEY_B64B}}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: 🔐 Test SSH connection
+      - name: 🧪 Test SSH connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo ✅ SSH connection successful"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo ✅ Connexion SSH réussie"
