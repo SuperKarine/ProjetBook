@@ -3,6 +3,8 @@
 backup.sql
 .DS_Store
 src/.DS_Store
+tests.php
+vendor
 
 
 

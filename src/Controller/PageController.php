@@ -2,25 +2,20 @@
 
 namespace App\Controller;
 
-use App\Repository\CategoryRepository;
-
-class PageController extends Controller
+Class PageController
 {
     public function accueil(): void
     {
-
-        $categoryRepository = new CategoryRepository();
-
-        $categories =$categoryRepository->findAll();
-
-        $this->render'"page/accueil", [
-            "categories => $categories,
-        ]);
-    
+        echo "Page accueil";
     }
-    public function apropos():void
+
+    public function apropos(): void
     {
-        $this->render("page/apropos");
+        echo "Page apropos";
     }
+
+
+
+
 
 }
