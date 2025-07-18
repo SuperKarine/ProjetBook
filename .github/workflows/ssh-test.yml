@@ -1,17 +1,16 @@
-name: Test SSH Key
+name: Test SSH with Password
 
 on: [workflow_dispatch]
 
 jobs:
-  ssh-test:
+  ssh-with-password:
     runs-on: ubuntu-latest
     steps:
-      - name: 🔑 Setup SSH key (Base64 decoded)
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY_B64B}}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+      - name: 🔧 Installer sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: 🧪 Test SSH connection
+      - name: 🧪 Tester la connexion SSH avec mot de passe
+        env:
+          SSHPASS: ${{ secrets.GH_TOKEN }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo ✅ Connexion SSH réussie"
+          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo ✅ Connexion SSH avec mot de passe réussie"
