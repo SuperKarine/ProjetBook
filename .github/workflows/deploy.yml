@@ -51,12 +51,17 @@ jobs:
       - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: 📑 Copy docker-compose.yml to server via SSH key
+      - name: 🔑 Setup SSH key for SCP
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: 📑 Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          key: ~/.ssh/id_rsa  # <-- on utilise la clé privée ici
           source: ./docker-compose.yml
           target: ~/
 
@@ -64,21 +69,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: copy-docker-compose
     steps:
-      - name: ✅ Check secrets presence
+      - name: 🔑 Setup SSH key for SSH connection
         run: |
-          echo "GH_TOKEN is set: ${{ secrets.GH_TOKEN != '' }}"
-          echo "VPS_IP is set: ${{ secrets.VPS_IP != '' }}"
-          echo "VPS_USER is set: ${{ secrets.VPS_USER != '' }}"
-          echo "VPS_SSH_KEY is set: ${{ secrets.VPS_SSH_KEY != '' }}"
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-      - name: 🚀 Deploy images to server via SSH key
+      - name: 🚀 Deploy images to server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          key: ~/.ssh/id_rsa  # <-- on utilise la clé privée ici
           script: |
             cd
-            docker pull ${{ env.REGISTRY }}/${{ github.repository }}-final:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
+            docker pull ${{ env.REGISTRY }}/${{ github.repository }}-backend:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
+            docker pull ${{ env.REGISTRY }}/${{ github.repository }}-frontend:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
             docker compose up -d
             docker image prune -f
