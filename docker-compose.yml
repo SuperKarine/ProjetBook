@@ -34,38 +34,6 @@ services:
       - "traefik.http.services.app.loadbalancer.server.port=80"
 
   db:
-    image: mariadb:10.11
-    restart: always
-    user: root
-    env_file:
-      - .env
-    volumes:
-      - db-data:/var/lib/mysql
-    expose:
-      - "3306"
-    healthcheck:
-      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - web
-
-  phpmyadmin:
-    image: phpmyadmin
-    depends_on:
-      - db
-    environment:
-      - PMA_HOST=db
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pma.rule=Host(`pma.localhost`)"
-      - "traefik.http.routers.pma.entrypoints=web"
-      - "traefik.http.services.pma.loadbalancer.server.port=80"
-    networks:
-      - web
-
-  mongo:
     image: mongo
     restart: always
     env_file:
@@ -75,6 +43,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     expose:
       - "27017"
+    volumes:
+      - db-data:/data/db  
     networks:
       - web
 
@@ -83,8 +53,12 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      ME_CONFIG_MONGODB_SERVER: db
+      MONGO_INITDB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     depends_on:
-      - mongo
+      - db
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mongoex.rule=Host(`mongo.localhost`)"

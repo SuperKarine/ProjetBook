@@ -14,7 +14,7 @@ COPY . /app
 # Étape 2 : Image finale pour la production avec Apache et PHP
 FROM php:8.2-apache AS final
 
-RUN docker-php-ext-install pdo pdo_mysql
+
 RUN a2enmod rewrite
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
