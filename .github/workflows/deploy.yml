@@ -21,14 +21,18 @@ jobs:
       - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🔎 Debug GH_TOKEN
+      - name: 🔍 Debug GH_TOKEN
         run: |
-          if [ -z "${{ secrets.GH_TOKEN }}" ]; then
-            echo "❌ GH_TOKEN est vide ! Vérifie tes secrets dans GitHub."
+          echo "GH_TOKEN length: ${#GH_TOKEN}"
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "❌ GH_TOKEN is empty"
             exit 1
           else
-            echo "✅ GH_TOKEN est bien défini."
-          fi 
+            echo "✅ GH_TOKEN is set"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
 
       - name: 🧑‍💻 Log in to the Container registry
         uses: docker/login-action@v3
