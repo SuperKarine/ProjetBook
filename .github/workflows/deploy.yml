@@ -85,7 +85,7 @@ jobs:
           key: ~/.ssh/id_rsa
           script: |
             cd
-            docker pull ${{ env.REGISTRY }}/${{ github.repository }}-backend:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
-            docker pull ${{ env.REGISTRY }}/${{ github.repository }}-frontend:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
+            docker pull ghcr.io/${{ github.repository }}-backend:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
+            docker pull ghcr.io/${{ github.repository }}-frontend:${{ env.DOCKER_IMAGE_PRODUCTION_TAG }}
             docker compose up -d
             docker image prune -f
