@@ -24,8 +24,8 @@ jobs:
       - name: 🧑‍💻 Log in to the Container registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
+          registry: ghcr.io
+          username: SuperKarine
           password: ${{ secrets.GH_TOKEN }}
 
       - name: ⬆️ Extract metadata for ${{ matrix.image }}
@@ -54,7 +54,7 @@ jobs:
       - name: 🔑 Decode SSH key and configure
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PROJETBOOK_B64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
       
 
@@ -74,7 +74,7 @@ jobs:
       - name: 🔑 Decode SSH key and configure
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PROJETBOOK_B64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
       - name: 🚀 Deploy images to server
