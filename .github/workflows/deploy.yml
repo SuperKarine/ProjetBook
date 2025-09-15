@@ -71,11 +71,18 @@ jobs:
 
       - name: 🔍 Debug SSH key
         run: |
-            echo "Contenu du dossier ~/.ssh :"
-            ls -la ~/.ssh
-            echo "Type du fichier id_rsa :"
-            file ~/.ssh/id_rsa   
+          echo "Contenu du dossier ~/.ssh :"
+          ls -la ~/.ssh
+          echo "Type du fichier id_rsa :"
+          file ~/.ssh/id_rsa
+          echo "Premières lignes de id_rsa :"
+          head -n 5 ~/.ssh/id_rsa
+          echo "Permissions de id_rsa :"
+          stat ~/.ssh/id_rsa
       
+      - name: 🔑 Test SSH connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo Connection OK"
 
       - name: 📑 Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
