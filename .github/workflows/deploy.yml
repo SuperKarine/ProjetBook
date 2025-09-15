@@ -100,6 +100,7 @@ jobs:
       - name: 🔑 Decode SSH key and configure
         run: |
           mkdir -p ~/.ssh
+          rm -f ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PROJETBOOK_B64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
