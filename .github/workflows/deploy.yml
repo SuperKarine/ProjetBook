@@ -68,6 +68,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PROJETBOOK_B64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+      - name: 🔍 Debug SSH key
+        run: |
+            echo "Contenu du dossier ~/.ssh :"
+            ls -la ~/.ssh
+            echo "Type du fichier id_rsa :"
+            file ~/.ssh/id_rsa   
       
 
       - name: 📑 Copy docker-compose.yml to server
