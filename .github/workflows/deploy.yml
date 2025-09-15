@@ -89,7 +89,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          key: ~/.ssh/id_rsa
+          key: ${{ secrets.SSH_PROJETBOOK }}  
           source: ./docker-compose.yml
           target: ~/
 
