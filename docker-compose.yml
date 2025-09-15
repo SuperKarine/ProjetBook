@@ -16,10 +16,7 @@ services:
       - web
 
   server:
-    build:
-      context: .
-    volumes:
-      - .:/var/www/html
+    image: ghcr.io/SuperKarine/projetbook-final:production
     env_file:
       - .env
     depends_on:
