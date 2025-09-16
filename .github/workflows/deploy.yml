@@ -66,20 +66,10 @@ jobs:
       - name: 🔑 Decode SSH key and configure
         run: |
           mkdir -p ~/.ssh
+          rm -f ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PROJETBOOK_B64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: 🔍 Debug SSH key
-        run: |
-          echo "Contenu du dossier ~/.ssh :"
-          ls -la ~/.ssh
-          echo "Type du fichier id_rsa :"
-          file ~/.ssh/id_rsa
-          echo "Premières lignes de id_rsa :"
-          head -n 5 ~/.ssh/id_rsa
-          echo "Permissions de id_rsa :"
-          stat ~/.ssh/id_rsa
-      
       - name: 🔑 Test SSH connection
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo Connection OK"
@@ -89,7 +79,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          key: ~/.ssh/id_rsa  
+          key: ~/.ssh/id_rsa
           source: ./docker-compose.yml
           target: ~/
 
